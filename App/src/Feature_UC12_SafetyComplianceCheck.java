@@ -1,18 +1,23 @@
 import java.util.ArrayList;
 import java.util.List;
 
-// Goods Bogie class
-class GoodsBogie {
-    String type;
-    String cargo;
-
-    GoodsBogie(String type, String cargo) {
-        this.type = type;
-        this.cargo = cargo;
-    }
-}
-
 public class Feature_UC12_SafetyComplianceCheck {
+
+    // GoodsBogie class (Custom Object)
+    static class GoodsBogie {
+        String type;
+        String cargo;
+
+        public GoodsBogie(String type, String cargo) {
+            this.type = type;
+            this.cargo = cargo;
+        }
+
+        @Override
+        public String toString() {
+            return type + " Bogie carrying " + cargo;
+        }
+    }
 
     public static void main(String[] args) {
 
@@ -22,23 +27,29 @@ public class Feature_UC12_SafetyComplianceCheck {
         List<GoodsBogie> bogies = new ArrayList<>();
 
         bogies.add(new GoodsBogie("Cylindrical", "Petroleum"));
-        bogies.add(new GoodsBogie("Rectangular", "Coal"));
+        bogies.add(new GoodsBogie("Open", "Coal"));
+        bogies.add(new GoodsBogie("Box", "Grain"));
         bogies.add(new GoodsBogie("Cylindrical", "Petroleum"));
-        // Try invalid case:
+
+        // Uncomment below line to test invalid case
         // bogies.add(new GoodsBogie("Cylindrical", "Coal"));
 
-        // Step 2: Safety validation using Stream
-        boolean isSafe = bogies.stream()
-                .allMatch(b ->
-                        !b.type.equalsIgnoreCase("Cylindrical")
-                                || b.cargo.equalsIgnoreCase("Petroleum")
-                );
+        // Step 2: Display bogies
+        System.out.println("\nGoods Bogies:");
+        bogies.forEach(System.out::println);
 
-        // Step 3: Display result
-        System.out.println("\nSafety Compliance Check:");
+        // Step 3: Apply safety validation using Stream
+        boolean isSafe = bogies.stream().allMatch(bogie ->
+                // Rule: Cylindrical bogie must carry Petroleum
+                !bogie.type.equalsIgnoreCase("Cylindrical")
+                        || bogie.cargo.equalsIgnoreCase("Petroleum")
+        );
+
+        // Step 4: Display result
+        System.out.println("\nSafety Check Result:");
 
         if (isSafe) {
-            System.out.println("Train is SAFE ✅");
+            System.out.println("Train is SAFETY COMPLIANT ✅");
         } else {
             System.out.println("Train is NOT SAFE ❌");
         }
